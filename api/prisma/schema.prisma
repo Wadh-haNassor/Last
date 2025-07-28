@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  phone     String?
+  location  String?
+  password  String
+  hotspots  Hotspot[]
+  createdAt DateTime  @default(now())
+}
+
+model Hotspot {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  latitude    Float
+  longitude   Float
+  rating      Int      @default(3)
+  fishSpecies String[]
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  createdById Int
+  createdAt   DateTime @default(now())
+}
